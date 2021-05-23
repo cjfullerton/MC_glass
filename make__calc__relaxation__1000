@@ -1,0 +1,34 @@
+all: calc__relaxation__1000
+
+calc__relaxation__1000: calc__relaxation__1000.cc calc__relaxation__1000.h poly_sphere.o part_hard_spheres.o no_field.o no_boundary.o JRand_dyn.o box__neighbour_list__cell_list__HS.o integrator_MC_NPT_HS.o sys_info__mean_squared_displacement.o sys_info__scattering_functions.o box__neighbour_list__cell_list.o
+	g++ -O3 calc__relaxation__1000.cc poly_sphere.o part_hard_spheres.o no_field.o no_boundary.o JRand_dyn.o box__neighbour_list__cell_list__HS.o integrator_MC_NPT_HS.o sys_info__mean_squared_displacement.o sys_info__scattering_functions.o box__neighbour_list__cell_list.o -I particle/ -I part_interaction/ -I field/ -I boundary/ -I JRand_dyn/ -I box/ -I integrator/ -I sys_info/ -o calc__relaxation__1000
+
+poly_sphere.o: particle/poly_sphere.h particle/poly_sphere.cc
+	g++ -O3 -c particle/poly_sphere.cc
+
+part_hard_spheres.o: part_interaction/part_hard_spheres.cc part_interaction/part_hard_spheres.h
+	g++ -O3 -c part_interaction/part_hard_spheres.cc -I particle/ -I JRand_dyn/
+
+no_field.o: field/no_field.cc field/no_field.h
+	g++ -O3 -c field/no_field.cc
+
+no_boundary.o: boundary/no_boundary.cc boundary/no_boundary.h
+	g++ -O3 -c boundary/no_boundary.cc
+
+JRand_dyn.o: JRand_dyn/JRand_dyn.cc JRand_dyn/JRand_dyn.h
+	g++ -O3 -c JRand_dyn/JRand_dyn.cc 
+
+box__neighbour_list__cell_list__HS.o: box/box__neighbour_list__cell_list__HS.cc box/box__neighbour_list__cell_list__HS.h
+	g++ -O3 -c box/box__neighbour_list__cell_list__HS.cc -I particle/ -I part_interaction/ -I field/ -I boundary/ -I JRand_dyn/
+
+box__neighbour_list__cell_list.o: box/box__neighbour_list__cell_list.cc box/box__neighbour_list__cell_list.h
+	g++ -O3 -c box/box__neighbour_list__cell_list.cc -I particle/ -I part_interaction/ -I field/ -I boundary/ -I JRand_dyn/
+
+integrator_MC_NPT_HS.o: integrator/integrator_MC_NPT_HS.cc integrator/integrator_MC_NPT_HS.h
+	g++ -O3 -c integrator/integrator_MC_NPT_HS.cc -I box/ -I JRand_dyn/ -I particle/ -I part_interaction -I field -I boundary
+
+sys_info__mean_squared_displacement.o: sys_info/sys_info__mean_squared_displacement.cc sys_info/sys_info__mean_squared_displacement.h
+	g++ -O3 -c sys_info/sys_info__mean_squared_displacement.cc -I box/ -I particle
+
+sys_info__scattering_functions.o: sys_info/sys_info__scattering_functions.cc sys_info/sys_info__scattering_functions.h
+	g++ -O3 -c sys_info/sys_info__scattering_functions.cc -I box/ -I particle

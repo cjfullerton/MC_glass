@@ -1,0 +1,32 @@
+#include "sys_info__structure_factors.h"
+
+void sys_info__structure_factors::box_t0_in(box *i_box_t0) { box_t0 = i_box_t0;}
+
+void sys_info__structure_factors::box_ti_in(box *i_box_ti) { box_ti = i_box_ti;}
+
+void sys_info__structure_factors::calc_static_structure_factor(double q) {
+
+	double r2_acc, sij2, sij, q_dot_r, sin_q_dot_r, ssf_acc = 0.0, time;
+
+	for(int i = 0; i < box_ti->r_number_particles(); i++) {
+		for(int j = 0; j < box_ti->r_number_particles(); j++) {
+
+			r2_acc = box_ti->metric(i,j);	
+
+			sij = (box_ti->r_particle(i)->r_size() + box_ti->r_particle(j)->r_size())/2.0;
+			sij2 = sij*sij;
+
+			r2_acc = r2_acc/sij2;
+	
+			q_dot_r = q*sqrt(r2_acc);
+			sin_q_dot_r = sin(q_dot_r);
+			if(q_dot_r == 0.0) {q_dot_r = 1.0; sin_q_dot_r = 1.0;}
+			ssf_acc += sin_q_dot_r/(q_dot_r);
+		}
+	}
+
+	time = box_ti->r_timestamp();
+
+	printf("#SSF %f %f %f\n", time, q, ssf_acc/box_ti->r_number_particles());
+
+}
