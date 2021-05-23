@@ -1,5 +1,7 @@
 Monte Carlo code I've used for studying various glassy systems.
 
+Warning: needs some cleanup and testing!
+
 Includes:
 - Neighbour lists and cell lists
 - NPT, NVT, swap integrators
