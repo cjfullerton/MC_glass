@@ -1,1 +1,3 @@
 .DS_store
+*.o
+MC_NVT_equil_test
